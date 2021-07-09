@@ -119,7 +119,7 @@ _SPEC_SCAN_HEADER_TEMPLATE = env.from_string("""
 #T {{ acq_time }}  (Seconds)
 #P0 {{ positioner_positions | join(' ')}}
 #N {{ num_columns }}
-#L {{ motor_name }}  Epoch  Seconds  {{ data_keys | join('  ') }}
+#L {{ motor_name }}  Epoch  Seconds  {{ data_keys | join(' ') }}
 """)
 
 
