@@ -55,8 +55,9 @@ _SPEC_FILE_HEADER_TEMPLATE = env.from_string("""#F {{ filename }}
 #E {{ unix_time }}
 #D {{ readable_time }}
 #C {{ owner }}  User = {{ owner }}
-#O0 {{ positioner_variable_sources | join ('  ') }}
-#o0 {{ positioner_variable_names | join(' ') }}""")
+
+#O0 {{ positioner_variable_names | join ('  ') }}
+#C {{ positioner_variable_sources | join('  ') }}""")
 
 
 _DEFAULT_POSITIONERS = {'data_keys': {}}
@@ -117,7 +118,7 @@ _SPEC_SCAN_HEADER_TEMPLATE = env.from_string("""
 #S {{ scan_id }} {{ command }}
 #D {{ readable_time }}
 #T {{ acq_time }}  (Seconds)
-#P0 {{ positioner_positions | join(' ')}}
+#P0 {{ positioner_positions | join('  ')}}
 #N {{ num_columns }}
 #L {{ motor_name }}  Epoch  Seconds  {{ data_keys | join('  ') }}
 """)
