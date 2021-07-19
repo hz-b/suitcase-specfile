@@ -22,7 +22,7 @@ from suitcase.utils.tests.conftest import one_stream_multi_descriptors_plan
 # generate specfiles. It then compares these new specfiles to those in
 # data_from_suitcase_v0.7.0, line by line.
 
-
+@pytest.mark.skip(reason='files no longer represent current state of pymca')
 @pytest.mark.parametrize('example', ['count_1', 'count_3', 'scan', 'rel_scan'])
 def test_against_legacy_implementation(example, tmp_path):
     # Load example data from JSONL and re-serialize it as specfile.

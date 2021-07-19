@@ -103,10 +103,12 @@ _SPEC_1D_COMMAND_TEMPLATE = env.from_string(
     "{{ plan_name }} {{ scan_motor }} {{ start }} {{ stop }} {{ num }} {{ time }}")
 
 _SCANS_WITHOUT_MOTORS = {'ct': 'count'}
-_SCANS_WITH_MOTORS = {'ascan': 'scan', 'dscan': 'rel_scan', 'mesh': 'grid_scan'}
+_SCANS_WITH_MOTORS = {'ascan': 'scan','dscan': 'rel_scan', 'mesh': 'grid_scan','flyscan':'flycount'}
 _SPEC_SCAN_NAMES = _SCANS_WITHOUT_MOTORS.copy()
 _SPEC_SCAN_NAMES.update(_SCANS_WITH_MOTORS)
 _BLUESKY_PLAN_NAMES = {v: k for k, v in _SPEC_SCAN_NAMES.items()}
+
+
 
 
 def get_name(plan_name):
@@ -246,6 +248,10 @@ def to_spec_scan_header(start, primary_descriptor, baseline_event=None):
 
             motor_and_args = motor_and_args + [motor_names[motor], start_val, stop_val, num]
 
+    elif scan_command == 'flyscan':
+
+        motor_and_args = [motor_names[0],start['plan_args']['start'],start['plan_args']['stop'],start['plan_args']['num'],start['plan_args']['delay']]
+    
     else:
 
         for motor in range(len(motor_names)):
@@ -453,6 +459,7 @@ class Serializer(event_model.DocumentRouter):
         self._baseline_descriptor = None
         self._baseline_event = None
         self._primary_descriptor = None
+        self._secondary_descriptor = None
         self._has_not_written_scan_header = True
         self._has_not_written_file_header = True
         self._num_events_received = 0
@@ -514,8 +521,10 @@ class Serializer(event_model.DocumentRouter):
             # new file header
             self._baseline_descriptor = doc
         elif self._primary_descriptor:
-            # we already have a primary descriptor, why are we getting
+            self._secondary_descriptor = doc
+	    # we already have a primary descriptor, why are we getting
             # another one?
+            """
             err_msg = (
                 "The suitcase.specfile.Serializer is not designed to handle more "
                 "than one descriptor.  If you need this functionality, please "
@@ -523,8 +532,9 @@ class Serializer(event_model.DocumentRouter):
                 "Until that time, this DocumentToSpec callback will raise a "
                 "NotImplementedError if you try to use it with two event "
                 "streams.")
-            raise NotImplementedError(err_msg)
-        else:
+            """
+            #raise NotImplementedError(err_msg)
+        elif doc.get('name') == 'primary':
             self._primary_descriptor = doc
 
     def event(self, doc):
@@ -556,7 +566,8 @@ class Serializer(event_model.DocumentRouter):
                 "Until that time, this DocumentToSpec callback will raise a "
                 "NotImplementedError if you try to use it with two event "
                 "streams.")
-            raise NotImplementedError(err_msg)
+            #raise NotImplementedError(err_msg)
+            return
         self._num_events_received += 1
         # now write the scan data line
         scan_data_line = to_spec_scan_data(self._start,
