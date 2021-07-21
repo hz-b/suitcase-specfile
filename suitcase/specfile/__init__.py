@@ -250,7 +250,7 @@ def to_spec_scan_header(start, primary_descriptor, baseline_event=None):
 
     elif scan_command == 'flyscan':
 
-        motor_and_args = [motor_names[0],start['plan_args']['start'],start['plan_args']['stop'],start['plan_args']['num'],start['plan_args']['delay']]
+        motor_and_args = [motor_names[0],start['plan_args']['start'],start['plan_args']['stop'],start['plan_args']['num'],start['plan_args']['vel'],start['plan_args']['delay']]
     
     else:
 
@@ -290,7 +290,7 @@ _SPEC_EVENT_TEMPLATE = env.from_string("""
 
 def to_spec_scan_data(start, primary_descriptor, event):
     md = {}
-    md['unix_time'] = int(event['time'])
+    md['unix_time'] = event['time']
     md['acq_time'] = _get_acq_time(start)
     md['motor_position'] = _get_motor_positions(start, event)
     data_keys = _get_scan_data_column_names(start, primary_descriptor)
