@@ -250,7 +250,7 @@ def to_spec_scan_header(start, primary_descriptor, baseline_event=None):
 
     elif scan_command == 'flyscan':
 
-        motor_and_args = [motor_names[0],start['plan_args']['start'],start['plan_args']['stop'],start['plan_args']['num'],start['plan_args']['vel'],start['plan_args']['delay']]
+        motor_and_args = [motor_names[0],start['plan_args']['start'],start['plan_args']['stop'],start['plan_args']['vel'],start['plan_args']['delay']]
     
     else:
 
